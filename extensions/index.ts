@@ -58,8 +58,8 @@ export default function (pi: ExtensionAPI) {
     },
   });
 
-  pi.registerCommand("autonoxis", {
-    description: "Local autonoxis model: status | test | url <endpoint>",
+  pi.registerCommand("autonoxis-model", {
+    description: "Local autonoxis model (/autonoxis-model): status | test | url <endpoint>",
     handler: async (args: string, ctx: any) => {
       const [sub, ...rest] = args.trim().split(/\s+/).filter(Boolean);
       if (sub === "url" && rest[0]) {

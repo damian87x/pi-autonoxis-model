@@ -37,7 +37,7 @@ The extension is a client only. It needs the model server running locally; see
   `confidence`, `probabilities` and `act`.
 - Tool `autonoxis_evaluate`: `{state, questions}` in Jev's shape returns `choice` / `noul` / `score`
   answers with probabilities and confidence.
-- Command `/autonoxis status | test | url <endpoint>`: health check, session counters, endpoint override.
+- Command `/autonoxis-model status | test | url <endpoint>`: health check, session counters, endpoint override.
 - CLI `bin/autonoxis-gate.js -c "<criterion>" [--diff | -f file | stdin] [-p 0.7] [--json]`: exits 0 on
   pass, 1 on fail, 2 on error. Works as a `pi-subagents` gate. The state is cut to 6000 characters; if the
   server still rejects the prompt as too long, the gate shrinks it and retries up to 3 times and reports
