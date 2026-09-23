@@ -1,0 +1,22 @@
+{
+  "decision": {
+    "type": "choice",
+    "instructions": "`packet` describes the current state of an automated engineering lane. What is the next externally visible conductor action? Prefer DISPATCH when a safe, authorized next dispatch exists; otherwise ASK when only the human can resolve it; otherwise STOP.",
+    "criteria": {
+      "STOP": "No useful automated dispatch is permitted under the current authority or packet. Halt and report the blocker.",
+      "ASK": "A human decision, clarification, or additional authority is required before any useful dispatch.",
+      "DISPATCH": "A bounded worker, verifier, reviewer, or QA action is permitted now, including dispatching fresh verification after rejecting stale evidence."
+    }
+  },
+  "manager": {
+    "type": "choice",
+    "instructions": "`packet` describes a work lane and the evidence returned for it. What is the next externally visible manager action?",
+    "criteria": {
+      "ACCEPT": "Evidence is complete and current; close the lane with no further dispatch.",
+      "VERIFY": "Evidence is missing or stale, but no defect is established; dispatch independent verification.",
+      "REJECT": "The current candidate or evidence is known invalid or noncompliant; reject it and dispatch repair or replacement when allowed.",
+      "REOPEN": "A previously accepted or closed lane is invalidated by a later regression or material drift.",
+      "ESCALATE": "Resolution exceeds frozen scope, authority, security, or spend; ask the owner rather than dispatching mutation."
+    }
+  }
+}

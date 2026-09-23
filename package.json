@@ -1,0 +1,48 @@
+{
+  "name": "pi-autonoxis-model",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Local conductor decisions for Pi from autonoxis-conductor-9b (a LoRA fine-tune of Bespoke-Nimble-9B) behind the Jev wire format",
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "pi-coding-agent",
+    "nimble",
+    "conductor"
+  ],
+  "license": "MIT",
+  "author": "Damian Borek",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damian87x/pi-autonoxis-model.git"
+  },
+  "homepage": "https://github.com/damian87x/pi-autonoxis-model#readme",
+  "pi": {
+    "extensions": [
+      "./extensions/index.ts"
+    ]
+  },
+  "bin": {
+    "autonoxis-gate": "./bin/autonoxis-gate.js"
+  },
+  "engines": {
+    "pi": ">=0.85.0",
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@sinclair/typebox": "*"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    },
+    "@sinclair/typebox": {
+      "optional": true
+    }
+  }
+}
