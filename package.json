@@ -2,8 +2,8 @@
   "name": "pi-autonoxis-model",
   "private": true,
   "type": "module",
-  "version": "0.1.1",
-  "description": "Local conductor decisions for Pi from autonoxis-conductor-9b (a LoRA fine-tune of Bespoke-Nimble-9B) behind the Jev wire format",
+  "version": "0.2.0",
+  "description": "Local conductor decisions for Pi from Polaris 1 (polaris-1), the autonoxis decision model (a LoRA adapter on Bespoke-Nimble-9B) behind the Jev wire format",
   "keywords": [
     "pi-package",
     "pi-extension",

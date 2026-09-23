@@ -1,8 +1,8 @@
 # pi-autonoxis-model
 
 A [Pi](https://github.com/earendil-works/pi) extension that gets conductor decisions for autonomous coding
-lanes from a local model, [autonoxis-conductor-9b](https://huggingface.co/damianborek/autonoxis-conductor-9b)
-(a LoRA adapter for Bespoke-Nimble-9B). It runs on your own GPU and costs nothing per call.
+lanes from a local model, [Polaris 1](https://huggingface.co/damianborek/polaris-1) (`polaris-1`), the autonoxis decision model
+(a LoRA adapter on Bespoke-Nimble-9B, itself built on Qwen3.5-9B). It runs on your own GPU and costs nothing per call.
 
 The model does not generate text. It picks one label from a fixed set and returns a probability for each label.
 
@@ -58,7 +58,7 @@ There is no API key. The server has no authentication and binds to loopback only
 
 ## Accuracy
 
-From the [model card](https://huggingface.co/damianborek/autonoxis-conductor-9b). Gold labels are from a
+From the [model card](https://huggingface.co/damianborek/polaris-1). Gold labels are from a
 frontier model (Fable 5).
 
 - v8, 60 packets never used for training or selection: 10 seeds score **59.2 ± 0.9 / 60**, with 0 unsafe

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""autonoxis-server: Jev wire format (/v1/systemone) over a fine-tuned Nimble.
+"""autonoxis-server: Jev wire format (/v1/systemone) over a LoRA adapter on Bespoke-Nimble-9B.
 
 Run in a Python env with torch, transformers and peft; NIMBLE_DIR points at a clone of
 github.com/bespokelabsai/nimble (default: ./nimble next to this file):
@@ -17,7 +17,23 @@ from transformers import AutoTokenizer, Qwen3_5ForConditionalGeneration  # noqa:
 from nimble.scoring.parallel_schema import prepare_prompts  # noqa: E402
 from nimble.training.schema_train import candidate_logits  # noqa: E402
 
-MODEL_NAME = "nimble-conductor"
+
+def model_name(adapter, fallback):
+    """Name reported by the API: <adapter>/autonoxis.json "name", else --name, else "unknown"."""
+    meta = None
+    if adapter and Path(adapter, "autonoxis.json").is_file():
+        meta = Path(adapter, "autonoxis.json")
+    elif adapter and not Path(adapter).exists():  # Hugging Face repo id
+        try:
+            from huggingface_hub import hf_hub_download
+            meta = Path(hf_hub_download(adapter, "autonoxis.json"))
+        except Exception:  # noqa: BLE001
+            meta = None
+    if meta:
+        name = json.loads(meta.read_text()).get("name")
+        if name:
+            return name
+    return fallback or "unknown"
 
 
 def ser(v):
@@ -64,7 +80,7 @@ class Engine:
             model = PeftModel.from_pretrained(model, adapter)  # unmerged, as score_adapter.py evaluates it
         model.config.use_cache = False
         self.model = model.eval()
-        self.revision = json.loads(Path(adapter, "schema_config.json").read_text())["revision"] if adapter and Path(adapter, "schema_config.json").exists() else "merged"
+        self.revision = json.loads(Path(adapter, "schema_config.json").read_text())["revision"] if adapter and Path(adapter, "schema_config.json").exists() else "unknown"
 
     @torch.inference_mode()
     def answer(self, state, questions):
@@ -106,9 +122,9 @@ def make_handler(engine):
 
         def do_GET(self):
             if self.path == "/health":
-                return self._send(200, {"status": "ok", "model": MODEL_NAME})
+                return self._send(200, {"status": "ok", "model": engine.name})
             if self.path == "/v1/models":
-                return self._send(200, {"models": [{"name": MODEL_NAME, "description": "Fine-tuned Bespoke-Nimble-9B conductor, local", "release_date": engine.revision}]})
+                return self._send(200, {"models": [{"name": engine.name, "description": "LoRA adapter on Bespoke-Nimble-9B, local", "release_date": engine.revision}]})
             self._send(404, {"error": "not found"})
 
         def do_POST(self):
@@ -121,7 +137,7 @@ def make_handler(engine):
                     return self._send(400, {"error": "questions must be a non-empty object"})
                 t0 = time.perf_counter()
                 answers, tokens = engine.answer(body.get("state"), qs)
-                self._send(200, {"model": MODEL_NAME, "answers": answers, "usage": {"input_tokens": tokens, "output_tokens": 0},
+                self._send(200, {"model": engine.name, "answers": answers, "usage": {"input_tokens": tokens, "output_tokens": 0},
                                  "server_ms": round((time.perf_counter() - t0) * 1000, 1)})
             except ValueError as e:
                 self._send(400, {"error": str(e)})
@@ -136,11 +152,13 @@ def main():
     ap.add_argument("--model-config", default=str(NIMBLE / ".cache" / "nimble-model.json"))
     ap.add_argument("--port", type=int, default=8765)
     ap.add_argument("--device", default="cuda", help="cuda (default) or cpu for a slow smoke test")
+    ap.add_argument("--name", help="model name to report when the adapter has no autonoxis.json")
     a = ap.parse_args()
     cfg = json.loads(Path(a.model_config).read_text())
     t0 = time.time()
     engine = Engine(cfg["model_path"], a.adapter, cfg.get("max_input_tokens", 2048), a.device)
-    print(f"loaded in {time.time() - t0:.1f}s; adapter={a.adapter or 'none'}", flush=True)
+    engine.name = model_name(a.adapter, a.name)
+    print(f"loaded in {time.time() - t0:.1f}s; adapter={a.adapter or 'none'} name={engine.name}", flush=True)
     srv = ThreadingHTTPServer(("127.0.0.1", a.port), make_handler(engine))
     print(f"listening on http://127.0.0.1:{a.port}", flush=True)
     srv.serve_forever()

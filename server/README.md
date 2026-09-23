@@ -1,7 +1,7 @@
 # autonoxis server
 
 A small HTTP server that loads [Bespoke-Nimble-9B](https://huggingface.co/bespokelabs/Bespoke-Nimble-9B)
-with the [autonoxis-conductor-9b](https://huggingface.co/damianborek/autonoxis-conductor-9b) LoRA adapter
+with the [Polaris 1](https://huggingface.co/damianborek/polaris-1) (`polaris-1`) LoRA adapter
 (unmerged) and answers typed questions in the Jev wire format (`POST /v1/systemone`). The Pi extension in
 this repo is its client.
 
@@ -37,7 +37,7 @@ hf download bespokelabs/Bespoke-Nimble-9B --revision 594dfdcfb6f94e3d0c0db753518
 ## Adapter
 
 ```bash
-hf download damianborek/autonoxis-conductor-9b --local-dir adapter
+hf download damianborek/polaris-1 --local-dir adapter
 ```
 
 ## Run
@@ -50,6 +50,7 @@ python server/server.py --model-config nimble-model.json --adapter adapter --por
 It prints `listening on http://127.0.0.1:8765` once the model is loaded. Omit `--adapter` to serve stock Nimble.
 
 Endpoints: `GET /health`, `GET /v1/models`, `POST /v1/systemone` with `{"state": ..., "questions": {...}}`.
+The reported model name comes from the adapter's `autonoxis.json` `name`, else `--name`, else `unknown`.
 
 ## Security
 
