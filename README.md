@@ -6,6 +6,12 @@ lanes from a local model, [Polaris 1](https://huggingface.co/damianborek/polaris
 
 The model does not generate text. It picks one label from a fixed set and returns a probability for each label.
 
+## Links
+
+- Polaris 1 model: https://huggingface.co/damianborek/polaris-1
+- Vega 1 model (earlier, generative): https://huggingface.co/damianborek/vega-1
+- Claude Code plugin: https://github.com/damian87x/autonoxis-model
+
 ## How it works
 
 1. Pi (or the gate CLI) sends a lane packet, the text describing the lane's current state, to the local server.
