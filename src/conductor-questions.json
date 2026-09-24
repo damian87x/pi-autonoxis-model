@@ -1,11 +1,11 @@
 {
   "decision": {
     "type": "choice",
-    "instructions": "`packet` describes the current state of an automated engineering lane. What is the next externally visible conductor action? Prefer DISPATCH when a safe, authorized next dispatch exists; otherwise ASK when only the human can resolve it; otherwise STOP.",
+    "instructions": "`packet` describes the state of an automated engineering lane. The conductor never writes product code or runs gates; it chooses the NEXT externally visible action. Use priority DISPATCH > ASK > STOP. Judge any proposal in the packet, then label what happens next. A wrong proposed actor is not itself STOP: discard the proposal and DISPATCH the proper actor if already authorized. Stale evidence or worker prose leads to fresh independent verification. Existing capability with no proven defect leads to end-to-end QA. Standing owner authority for routine repair or review beats assistant retry caps. Out-of-allowlist mutation needs ASK unless a compliant in-scope action is available. A banned route with an approved replacement leads to DISPATCH.",
     "criteria": {
-      "STOP": "No useful automated dispatch is permitted under the current authority or packet. Halt and report the blocker.",
-      "ASK": "A human decision, clarification, or additional authority is required before any useful dispatch.",
-      "DISPATCH": "A bounded worker, verifier, reviewer, or QA action is permitted now, including dispatching fresh verification after rejecting stale evidence."
+      "STOP": "Only when no useful automated dispatch is permitted AND no open human question would change that, such as an owner hold or refusal, or an active writer/QA collision on the only authorized worktree with no authorized isolation.",
+      "ASK": "Only when a specific human clarification, scope amendment, spending, deployment, provider, security, account, or device decision is required before useful work. Required work exceeds the allowlist and no in-scope alternative exists.",
+      "DISPATCH": "Any safe bounded worker, verifier, reviewer, QA, fresh fixer, approved replacement route, or authorized isolated worktree can run now. Includes replacing a wrongly proposed actor with the proper authorized one."
     }
   },
   "manager": {

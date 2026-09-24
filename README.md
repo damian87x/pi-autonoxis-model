@@ -52,6 +52,7 @@ The extension is a client only. It needs the model server running locally; see
 The model was trained on one call shape only, and `autonoxis_conductor` sends exactly that: one question
 with id `label`, state `{"packet": <packet>}`, and the question text from
 [src/conductor-questions.json](src/conductor-questions.json).
+The decision track uses the conductor contract prompt; on real-world orchestrator packets (v9) accuracy rises from 59% to 67% with no change on v5–v8.
 
 ## Configuration
 
