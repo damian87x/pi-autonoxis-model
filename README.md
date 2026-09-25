@@ -1,14 +1,17 @@
 # pi-autonoxis-model
 
 A [Pi](https://github.com/earendil-works/pi) extension that gets conductor decisions for autonomous coding
-lanes from a local model, [Polaris 1](https://huggingface.co/damianborek/polaris-1) (`polaris-1`), the autonoxis decision model
-(a LoRA adapter on Bespoke-Nimble-9B, itself built on Qwen3.5-9B). It runs on your own GPU and costs nothing per call.
+lanes from a local model. The recommended model is [Polaris 2](https://huggingface.co/damianborek/polaris-2) (`polaris-2`,
+HF `damianborek/polaris-2`), the autonoxis decision model (a LoRA adapter on Bespoke-Nimble-9B, itself built on
+Qwen3.5-9B). It runs on your own GPU and costs nothing per call. [Polaris 1](https://huggingface.co/damianborek/polaris-1)
+(`polaris-1`) still works with older versions of this extension (0.3.x).
 
 The model does not generate text. It picks one label from a fixed set and returns a probability for each label.
 
 ## Links
 
-- Polaris 1 model: https://huggingface.co/damianborek/polaris-1
+- Polaris 2 model (recommended): https://huggingface.co/damianborek/polaris-2
+- Polaris 1 model (previous): https://huggingface.co/damianborek/polaris-1
 - Vega 1 model (earlier, generative): https://huggingface.co/damianborek/vega-1
 - Claude Code plugin: https://github.com/damian87x/autonoxis-model
 
@@ -52,7 +55,8 @@ The extension is a client only. It needs the model server running locally; see
 The model was trained on one call shape only, and `autonoxis_conductor` sends exactly that: one question
 with id `label`, state `{"packet": <packet>}`, and the question text from
 [src/conductor-questions.json](src/conductor-questions.json).
-The decision track uses the conductor contract prompt; on real-world orchestrator packets (v9) accuracy rises from 59% to 67% with no change on v5–v8.
+Polaris 2 was trained with these exact questions for both tracks. Use the question file that ships with the
+extension version matching your model.
 
 ## Configuration
 
@@ -65,17 +69,18 @@ There is no API key. The server has no authentication and binds to loopback only
 
 ## Accuracy
 
-From the [model card](https://huggingface.co/damianborek/polaris-1). Gold labels are from a
-frontier model (Fable 5).
+Polaris 2 on real orchestrator packets (v9): 72% (Polaris 1: 59%); v5–v8 all correct; confidence not calibrated on real packets.
 
-- v8, 60 packets never used for training or selection: 10 seeds score **59.2 ± 0.9 / 60**, with 0 unsafe
-  answers (a wrong `DISPATCH` or `ACCEPT`) in every seed. The released adapter (seed 1) scores 58/60.
-- v8 is **in-distribution**: it shares scenario families and the drafting pipeline with the training
-  data. It is not an out-of-distribution test.
-- One of the adapter's two v8 misses is confident: `ACCEPT` predicted as `VERIFY` at confidence 0.998,
-  so the 0.8 gate does not catch it. The other miss (confidence 0.66) is escalated.
-- Untrained Jev (TypeSafe) also scores 60/60 on v8. This model does not beat Jev. Its advantage is that it
-  runs locally at no per-call cost (about 100 ms per request on one GPU after warm-up).
+From the [Polaris 2 model card](https://huggingface.co/damianborek/polaris-2):
+
+- v9 is 96 real orchestrator packets. Its labels are model labels (two frontier models, labelled blind;
+  disagreements ruled in favour of one of them), not human labels.
+- Polaris 2 scores 69/96 on v9; Polaris 1 scores 57/96. The untrained Jev contract prompt scores 70/96,
+  so Polaris 2 roughly matches it, locally and at no per-call cost.
+- Confidence is not calibrated on real packets: five v9 misses are unsafe (four `VERIFY` packets answered
+  `ACCEPT`, one `ASK` answered `DISPATCH`), all at confidence >= 0.99, so the 0.8 gate does not catch them.
+  Treat `ACCEPT` as "verify first".
+- The 0.8 gate keeps 93 of 96 v9 packets at 74.2% accuracy.
 - Prompts are limited to 2048 tokens, English only, and the labels follow one decision contract.
 
 ## Tests

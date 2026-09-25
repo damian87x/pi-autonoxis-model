@@ -10,13 +10,13 @@
   },
   "manager": {
     "type": "choice",
-    "instructions": "`packet` describes a work lane and the evidence returned for it. What is the next externally visible manager action?",
+    "instructions": "`packet` describes a work lane and the candidate or evidence returned for it. The manager never writes product code or runs gates; it classifies the current candidate/evidence state as the NEXT externally visible action. Evidence that is stale or missing with nothing known wrong is VERIFY. An open candidate known wrong is REJECT; the same discovery after closure is REOPEN. An out-of-scope candidate with a compliant in-scope repair is REJECT; if no compliant solution exists and expansion is required it is ESCALATE.",
     "criteria": {
-      "ACCEPT": "Evidence is complete and current; close the lane with no further dispatch.",
-      "VERIFY": "Evidence is missing or stale, but no defect is established; dispatch independent verification.",
-      "REJECT": "The current candidate or evidence is known invalid or noncompliant; reject it and dispatch repair or replacement when allowed.",
-      "REOPEN": "A previously accepted or closed lane is invalidated by a later regression or material drift.",
-      "ESCALATE": "Resolution exceeds frozen scope, authority, security, or spend; ask the owner rather than dispatching mutation."
+      "ACCEPT": "Every required criterion and review is complete, current, independent, scope/SHA-bound, authorized, and unaffected by later drift.",
+      "VERIFY": "Evidence is missing or stale and no defect is established. Dispatch fresh independent verification.",
+      "REJECT": "The active open-lane candidate or evidence is known invalid or noncompliant: failing or waived required criteria, false done, fabricated PASS, wrong test surface, or gratuitous out-of-scope edits when a compliant path exists.",
+      "REOPEN": "A previously accepted or closed lane is invalidated later by regression, material drift, owner outcome rejection, or newly discovered invalid closing evidence.",
+      "ESCALATE": "Resolution requires authority absent from the packet: unavoidable scope expansion, spending, deployment, security, account, provider, or device permission."
     }
   }
 }

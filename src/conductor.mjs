@@ -1,4 +1,4 @@
-// Conductor helper: the exact convention Polaris 1 (polaris-1) was trained on — one `label` choice over state {packet}.
+// Conductor helper: the exact convention Polaris 2 (polaris-2) was trained on — one `label` choice over state {packet}.
 import { readFileSync } from "node:fs";
 
 export const QUESTIONS = JSON.parse(readFileSync(new URL("./conductor-questions.json", import.meta.url), "utf8"));

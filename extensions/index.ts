@@ -12,7 +12,7 @@ export default function (pi: ExtensionAPI) {
     name: "autonoxis_evaluate",
     label: "Autonoxis Evaluate",
     description:
-      "Fast typed System One decision from the local autonoxis server (Polaris 1 / polaris-1, Jev-compatible): choice, noul (P(true)), or score over a state. No text generation; returns probabilities and confidence.",
+      "Fast typed System One decision from the local autonoxis server (Polaris 2 / polaris-2, Jev-compatible): choice, noul (P(true)), or score over a state. No text generation; returns probabilities and confidence.",
     promptSnippet: "Typed local decision: classify, gate, route, or score a state",
     promptGuidelines: [
       "Use autonoxis_evaluate for one-second judgments code will branch on (routing, pass/fail, risk), not for reasoning or explanations.",
@@ -46,7 +46,7 @@ export default function (pi: ExtensionAPI) {
     name: "autonoxis_conductor",
     label: "Autonoxis Conductor",
     description:
-      "Next conductor action for a lane from Polaris 1 (polaris-1), using its trained convention (one `label` question over state {packet}). act is true when confidence >= 0.8, else \"escalate\".",
+      "Next conductor action for a lane from Polaris 2 (polaris-2), using its trained convention (one `label` question over state {packet}). act is true when confidence >= 0.8, else \"escalate\".",
     promptSnippet: "Conductor decision (decision or manager track) for a lane packet",
     parameters: Type.Object({
       track: Type.Union([Type.Literal("decision"), Type.Literal("manager")]),

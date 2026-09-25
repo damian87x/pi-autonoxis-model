@@ -1,7 +1,7 @@
 # autonoxis server
 
 A small HTTP server that loads [Bespoke-Nimble-9B](https://huggingface.co/bespokelabs/Bespoke-Nimble-9B)
-with the [Polaris 1](https://huggingface.co/damianborek/polaris-1) (`polaris-1`) LoRA adapter
+with the [Polaris 2](https://huggingface.co/damianborek/polaris-2) (`polaris-2`) LoRA adapter
 (unmerged) and answers typed questions in the Jev wire format (`POST /v1/systemone`). The Pi extension in
 this repo is its client.
 
@@ -37,8 +37,11 @@ hf download bespokelabs/Bespoke-Nimble-9B --revision 594dfdcfb6f94e3d0c0db753518
 ## Adapter
 
 ```bash
-hf download damianborek/polaris-1 --local-dir adapter
+hf download damianborek/polaris-2 --local-dir adapter
 ```
+
+[Polaris 1](https://huggingface.co/damianborek/polaris-1) (`hf download damianborek/polaris-1 --local-dir adapter`) still
+loads the same way; use it with older plugin versions (pi-autonoxis-model 0.3.x, autonoxis-model 0.2.x).
 
 ## Run
 
