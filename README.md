@@ -71,7 +71,7 @@ There is no API key. The server has no authentication and binds to loopback only
 
 ## Accuracy
 
-Polaris 3 on real orchestrator packets (v9): 79.8% (75/94; Polaris 2: 77.7%, Polaris 1: 64.9%); v5–v8 all correct.
+Polaris 3 (recommended): about the same accuracy as Polaris 2 on real packets (~77%), slightly better confidence gate (v9 seed averages 77.1% vs 76.3%, within seed-to-seed variation; Polaris 1: 64.9%); v5–v8 all correct.
 
 From the [Polaris 3 model card](https://huggingface.co/damianborek/polaris-3):
 
