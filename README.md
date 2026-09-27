@@ -35,8 +35,9 @@ The request shape is the same as TypeSafe Jev's `/v1/systemone`, so the server a
 ## Install
 
 ```bash
-pi install git:github.com/damian87x/pi-autonoxis-model        # for your user
-pi install git:github.com/damian87x/pi-autonoxis-model -l     # for this project only (.pi/settings.json)
+pi install npm:pi-autonoxis-model                            # for your user, from npm
+pi install npm:pi-autonoxis-model -l                         # for this project only (.pi/settings.json)
+pi install git:github.com/damian87x/pi-autonoxis-model        # or straight from GitHub
 ```
 
 The extension is a client only. It needs the model server running locally; see
